@@ -51,6 +51,15 @@
   aside{width:340px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
   #map{flex:1;min-width:0;background:#D8E2E8;position:relative}
 
+  /* Desktop sidebar collapse */
+  .sidebar-toggle{position:absolute;top:12px;left:12px;z-index:1000;font:inherit;font-size:12.5px;font-weight:600;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);cursor:pointer;box-shadow:0 2px 8px rgba(15,20,40,.12);white-space:nowrap}
+  .sidebar-toggle:hover{border-color:var(--teal)}
+  .sidebar-toggle:focus-visible{outline:2px solid var(--teal);outline-offset:1px}
+  @media (min-width:761px){
+    aside{transition:margin-left .25s ease}
+    .app.side-collapsed aside{margin-left:-340px}
+  }
+
   .controls{padding:12px 14px 10px;display:flex;flex-direction:column;gap:9px;border-bottom:1px solid var(--line)}
   .search, .home-search{width:100%;padding:9px 12px;font:inherit;font-size:14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card)}
   .search:focus,.home-search:focus{outline:2px solid var(--teal);outline-offset:1px}
@@ -79,22 +88,22 @@
 
   /* Fuel settings */
   .fuel-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:4px}
-  .fuel-grid label{font-size:10px;letter-spacing:.4px;color:var(--ink-soft);display:block;margin-bottom:2px}
+  .fuel-grid label{font-size:10px;letter-spacing:.4px;color:var(--ink-soft);display:block;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .fuel-grid input{width:100%;font:inherit;font-size:13px;padding:5px 7px;border:1px solid var(--line);border-radius:7px;font-variant-numeric:tabular-nums}
   .fuel-note{font-size:10px;color:var(--ink-soft);margin-top:5px;line-height:1.4}
 
   .result-count{font-size:12px;color:var(--ink-soft);padding:8px 14px 4px}
   .school-list{flex:1;overflow-y:auto;padding:4px 10px 14px;display:flex;flex-direction:column;gap:8px}
-  .school-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px;cursor:pointer;display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;gap:2px 10px;text-align:left;font:inherit;width:100%}
+  .school-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;gap:2px 10px;text-align:left;font:inherit;width:100%}
   .school-card:hover{border-color:var(--teal)}
   .school-card:focus-visible{outline:2px solid var(--teal);outline-offset:1px}
   .school-card.active{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal)}
-  .sc-name{font-family:var(--font-display);font-size:17px;font-weight:600;letter-spacing:.3px;line-height:1.15}
-  .sc-meta{font-size:11.5px;color:var(--ink-soft)}
-  .sc-gps{grid-row:1/span 2;align-self:center;text-align:right}
+  .sc-name{grid-column:1;grid-row:1;font-family:var(--font-display);font-size:17px;font-weight:600;letter-spacing:.3px;line-height:1.15}
+  .sc-meta{grid-column:1;grid-row:2;font-size:11.5px;color:var(--ink-soft)}
+  .sc-gps{grid-column:2;grid-row:1/span 2;align-self:center;text-align:right;white-space:nowrap}
   .sc-gps .val{font-size:16px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
   .sc-gps .lbl{font-size:9.5px;color:var(--ink-soft);letter-spacing:.4px}
-  .sc-gps .dist{font-size:12px;color:var(--green);font-weight:600;margin-top:2px}
+  .sc-gps .dist{font-size:12px;color:var(--green);font-weight:600;margin-top:2px;white-space:nowrap}
   .tag{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.5px;padding:1px 7px;border-radius:999px;color:#fff;vertical-align:1px;margin-right:4px}
   .tag.sbp{background:var(--navy)} .tag.mrsm{background:var(--amber-deep)} .tag.demo{background:#9AA3AF}
 
@@ -184,6 +193,7 @@
 
   .panel-toggle{display:none}
   @media (max-width:760px){
+    .sidebar-toggle{display:none}
     .compare-modal{padding:14px}
     table.cmp{font-size:12px}
     table.cmp th:first-child, table.cmp td:first-child{width:auto}
@@ -228,7 +238,7 @@
         <div class="home-status" id="homeStatus">Belum ditetapkan. Cari alamat atau klik "Pin atas peta" kemudian klik lokasi rumah anda.</div>
 
         <div class="fuel-grid">
-          <div><label for="fCons">PENGGUNAAN L/100KM</label><input id="fCons" type="number" step="0.1" min="1" value="7.0"></div>
+          <div title="Penggunaan minyak (liter per 100 km)"><label for="fCons">GUNA L/100KM</label><input id="fCons" type="number" step="0.1" min="1" value="7.0"></div>
           <div><label for="fSub">BUDI95 RM/L</label><input id="fSub" type="number" step="0.01" min="0" value="1.99"></div>
           <div><label for="fMkt">PASARAN RM/L</label><input id="fMkt" type="number" step="0.01" min="0" value="3.40"></div>
         </div>
@@ -259,6 +269,7 @@
   </aside>
 
   <div id="map">
+    <button class="sidebar-toggle" id="sidebarToggle" aria-expanded="true" aria-controls="panel">◀ Sorok senarai</button>
     <div class="route-card" id="routeCard" aria-live="polite"></div>
   </div>
 </div>
@@ -739,6 +750,16 @@ function togglePanel(open){
   toggleBtn.textContent=willOpen?'Tutup senarai ▼':'Senarai sekolah & tapis ▲';
 }
 toggleBtn.addEventListener('click',()=>togglePanel());
+
+/* Desktop sidebar collapse */
+const appEl=document.querySelector('.app');
+const sidebarToggle=document.getElementById('sidebarToggle');
+sidebarToggle.addEventListener('click',()=>{
+  const collapsed=appEl.classList.toggle('side-collapsed');
+  sidebarToggle.textContent=collapsed?'▶ Senarai sekolah':'◀ Sorok senarai';
+  sidebarToggle.setAttribute('aria-expanded',String(!collapsed));
+  setTimeout(()=>map.invalidateSize(),280);   // let the slide animation finish, then redraw tiles
+});
 
 render();
 updateCompareBar();
